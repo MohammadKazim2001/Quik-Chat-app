@@ -14,7 +14,7 @@ function Login() {
       {/* left side  */}
       <img src={assets.logo_big} alt="" className="w-[min(30vw,250px)]" />
       {/* right side  */}
-      <form className="border-2 bg-white/8 text-white border-gray-500 p-6 flex flex-col gap-6 rounded-lg shadow-lg">
+      <form className="border-2 bg-fwhite/8 text-white border-gray-500 p-6 flex flex-col gap-6 rounded-lg shadow-lg">
         <h2 className="font-medium text-2xl flex justify-between items-center">
           {currState}
           <img src={assets.arrow_icon} alt="" className="w-5 cursor-pointer" />
@@ -87,9 +87,45 @@ function Login() {
         >
           {currState === "Sign Up" ? "Create Account" : "Login Now"}
         </button>
-        <div>
+        <div className="flex items-center gap-2 text-sm text-gray-500">
           <input type="checkbox" />
           <p>Agree to the terms of use & privacy policy</p>
+        </div>
+        {/* {currState === "Sign Up" && (
+          <div className="flex items-center gap-2 text-sm text-gray-500">
+            <input type="checkbox" />
+            <p>Agree to the terms of use & privacy policy</p>
+          </div>
+        )} */}
+
+        <div className="flex flex-col gap-2">
+          {currState === "Sign Up" ? (
+            <p
+              onClick={() => {
+                setCurrState("Login");
+                setIsDataSubmited(false);
+              }}
+              className="text-sm text-gray-600"
+            >
+              Already have an account?
+              <span className="font-medium text-violet-500 cursor-pointer">
+                Login
+              </span>
+            </p>
+          ) : (
+            <p
+              onClick={() => {
+                setCurrState("Sign Up");
+                setIsDataSubmited(true);
+              }}
+              className="text-sm text-gray-600"
+            >
+              Create an account
+              <span className="font-medium text-violet-500 cursor-pointer">
+                Click here
+              </span>
+            </p>
+          )}
         </div>
       </form>
     </div>
