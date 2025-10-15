@@ -1,9 +1,9 @@
-import React, { use, useContext, useEffect, useRef, useState } from "react";
-import assets, { messagesDummyData } from "../assets/assets";
+import toast from "react-hot-toast";
+import { useContext, useEffect, useRef, useState } from "react";
+import assets from "../assets/assets";
 import { formatMessageTime } from "../lib/utils";
 import { ChatContext } from "../context/ChatContext";
 import { AuthContext } from "../context/AuthContext";
-import toast from "react-hot-toast";
 
 function ChatContainer() {
   const { messages, selectedUser, setSelectedUser, sendMessage, getMessages } =
@@ -138,7 +138,6 @@ function ChatContainer() {
               src={assets.gallery_icon}
               alt=""
               className="w-5 mr-2 cursor-pointer"
-              onClick={handleSendImage}
             />
           </label>
         </div>
