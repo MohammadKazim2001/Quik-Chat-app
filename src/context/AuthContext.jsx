@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import { io } from "socket.io-client";
 
 const backendURL = import.meta.env.VITE_BACKEND_URL;
 axios.defaults.baseURL = backendURL;
@@ -28,12 +29,16 @@ export const AuthProvider = ({ children }) => {
   //   login function
   const login = async (state, credentials) => {
     try {
+      console.log("Sending credentials:", credentials);
+
       const { data } = await axios.post(`/api/auth/${state}`, credentials);
       if (data.success) {
         setAuthUser(data.userData);
         connectSocket(data.userData);
         axios.defaults.headers.common["token"] = data.token;
         setToken(data.token);
+        console.log("Sending credentials:", credentials);
+
         localStorage.setItem("token", data.token);
         toast.success(data.message);
       } else {
