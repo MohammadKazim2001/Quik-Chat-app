@@ -1,16 +1,32 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import assets from "../assets/assets";
+import { AuthContext } from "../context/AuthContext";
 
 function Profile() {
+  const { authUser, updateProfile } = useContext(AuthContext);
   const navigate = useNavigate();
   const [selectedImg, setSelectedImg] = useState(null);
-  const [name, setName] = useState("Kazim Amiri");
-  const [bio, setBio] = useState("");
+  const [fullName, setFullName] = useState(authUser.fullName);
+  const [bio, setBio] = useState(authUser.bio);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    navigate("/");
+    if (!selectedImg) {
+      await updateProfile({ name, bio });
+
+      navigate("/");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.readAsDataURL(selectedImg);
+    reader.onloadend = async () => {
+      // await updateProfile({ fullName, bio, avatar: reader.result });
+      const base64Image = reader.result;
+      await updateProfile({ profilePic: base64Image, fullName, bio });
+      navigate("/");
+    };
   };
 
   return (
@@ -45,8 +61,8 @@ function Profile() {
           </label>
           <input
             type="text"
-            onChange={(e) => setName(e.target.value)}
-            value={name}
+            onChange={(e) => setFullName(e.target.value)}
+            value={fullName}
             placeholder="Your name"
             className="p-2 border border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500"
             required
@@ -69,7 +85,9 @@ function Profile() {
         <img
           src={assets.logo_icon}
           alt=""
-          className="max-w-44 aspect-square rounded-full mx-10 max-sm:mt-10"
+          className={`max-w-44 aspect-square rounded-full mx-10 max-sm:mt-10 ${
+            selectedImg && "rounded-full"
+          }y`}
         />
       </div>
     </div>

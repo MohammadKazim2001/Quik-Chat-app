@@ -63,15 +63,15 @@ export const AuthProvider = ({ children }) => {
   // update profile function
   const updateProfile = async (updatedData) => {
     try {
-      const data = await axios.put("/api/auth/update-profle", body);
+      const { data } = await axios.put("/api/auth/update-profile", updatedData);
       if (data.success) {
         setAuthUser(data.user);
         toast.success(data.message);
       } else {
-        toast.error(data.message);
+        toast.error(data.message || "Failed to update profile");
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response?.data?.message || error.message);
     }
   };
 
@@ -88,12 +88,13 @@ export const AuthProvider = ({ children }) => {
     });
   };
 
+  // check auth only when token changes
   useEffect(() => {
     if (token) {
       axios.defaults.headers.common["token"] = token;
+      checkAuth();
     }
-    checkAuth();
-  });
+  }, [token]);
 
   const value = {
     axios,
